@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Box,
   Button,
@@ -10,8 +12,29 @@ import {
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+interface TPatienData {
+  name: string;
+  email: string;
+  contactNumber: string;
+  address: string;
+}
+
+interface TPatientRegisterData {
+  password: string;
+  patient: TPatienData;
+}
 
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<TPatientRegisterData>();
+  const onSubmit: SubmitHandler<TPatientRegisterData> = (data) =>
+    console.log(data);
   return (
     <Container>
       <Stack
@@ -48,13 +71,13 @@ const Register = () => {
           </Stack>
 
           <Box>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2} my={1}>
                 <Grid item md={12}>
                   <TextField
                     label="Name"
                     fullWidth={true}
-                    name="patient.name"
+                    {...register("patient.name")}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -62,7 +85,7 @@ const Register = () => {
                     label="Email"
                     type="email"
                     fullWidth={true}
-                    name="patient.email"
+                    {...register("patient.email")}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -70,7 +93,7 @@ const Register = () => {
                     label="Password"
                     type="password"
                     fullWidth={true}
-                    name="password"
+                    {...register("password")}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -78,14 +101,14 @@ const Register = () => {
                     label="Contact Number"
                     type="tel"
                     fullWidth={true}
-                    name="patient.contactNumber"
+                    {...register("patient.contactNumber")}
                   />
                 </Grid>
                 <Grid item md={6}>
                   <TextField
                     label="Address"
                     fullWidth={true}
-                    name="patient.address"
+                    {...register("patient.address")}
                   />
                 </Grid>
               </Grid>
@@ -99,7 +122,10 @@ const Register = () => {
                 Register
               </Button>
               <Typography component="p" fontWeight={300}>
-                Do you already have an account? <Link href="/login" className="text-blue-600">Login</Link>
+                Do you already have an account?{" "}
+                <Link href="/login" className="text-blue-600">
+                  Login
+                </Link>
               </Typography>
             </form>
           </Box>
