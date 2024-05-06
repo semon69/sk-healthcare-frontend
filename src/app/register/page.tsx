@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Box,
@@ -13,6 +13,7 @@ import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { modifyPayload } from "@/utils/verifyPayload";
 
 interface TPatienData {
   name: string;
@@ -33,8 +34,11 @@ const Register = () => {
     watch,
     formState: { errors },
   } = useForm<TPatientRegisterData>();
-  const onSubmit: SubmitHandler<TPatientRegisterData> = (data) =>
+  const onSubmit: SubmitHandler<TPatientRegisterData> = (values) => {
+    const data = modifyPayload(values);
     console.log(data);
+  };
+
   return (
     <Container>
       <Stack
