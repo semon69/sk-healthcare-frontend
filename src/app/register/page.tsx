@@ -14,6 +14,11 @@ import assets from "@/assets";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { modifyPayload } from "@/utils/verifyPayload";
+import { registerPatient } from "@/services/actions/register";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { loginUser } from "@/services/actions/login";
+import { storeUserInfo } from "@/services/authService/authServices";
 
 interface TPatienData {
   name: string;
@@ -28,15 +33,35 @@ interface TPatientRegisterData {
 }
 
 const Register = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<TPatientRegisterData>();
-  const onSubmit: SubmitHandler<TPatientRegisterData> = (values) => {
+  const onSubmit: SubmitHandler<TPatientRegisterData> = async (values) => {
     const data = modifyPayload(values);
-    console.log(data);
+    // console.log(data);
+    try {
+      const res = await registerPatient(data);
+      // console.log(res);
+      if (res?.data?.id) {
+        toast.success(res?.message);
+        // router.push("/login")
+        const userRes = await loginUser({
+          password: values.password,
+          email: values.patient.email,
+        });
+        console.log(res);
+        if (userRes?.data?.accessToken) {
+          storeUserInfo(userRes?.data?.accessToken);
+          router.push("/");
+        }
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
   };
 
   return (
