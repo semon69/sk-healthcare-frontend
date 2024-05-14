@@ -19,11 +19,18 @@ import { toast } from "sonner";
 import { storeUserInfo } from "@/services/authService/authServices";
 import SKForm from "@/components/form/SKForm";
 import SKInput from "@/components/form/SKInput";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export interface FormValues {
   email: string;
   password: string;
 }
+
+export const validationSchema = z.object({
+  email: z.string().email("Please enter a valid email address!"),
+  password: z.string().min(6, "Must be at least 6 characters"),
+});
 
 const LoginPage = () => {
   const router = useRouter();
@@ -77,7 +84,10 @@ const LoginPage = () => {
           </Stack>
 
           <Box>
-            <SKForm onSubmit={handleLogin}>
+            <SKForm
+              onSubmit={handleLogin}
+              resolver={zodResolver(validationSchema)}
+            >
               <Grid container spacing={2} my={1}>
                 <Grid item md={6}>
                   <SKInput
