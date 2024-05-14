@@ -21,6 +21,7 @@ import SKForm from "@/components/form/SKForm";
 import SKInput from "@/components/form/SKInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 export interface FormValues {
   email: string;
@@ -33,6 +34,7 @@ export const validationSchema = z.object({
 });
 
 const LoginPage = () => {
+  const [error, setError] = useState("");
   const router = useRouter();
   const handleLogin = async (values: FieldValues) => {
     // console.log(data);
@@ -43,6 +45,8 @@ const LoginPage = () => {
         await storeUserInfo(res?.data?.accessToken);
         toast.success(res?.message);
         router.push("/");
+      } else {
+        setError(res?.message);
       }
     } catch (error: any) {
       console.log(error.message);
@@ -83,6 +87,22 @@ const LoginPage = () => {
             </Box>
           </Stack>
 
+          {error && (
+            <Box>
+              <Typography
+                sx={{
+                  backgroundColor: "red",
+                  padding: "1px",
+                  borderRadius: "2px",
+                  color: "white",
+                  marginTop: "5px",
+                }}
+              >
+                {error}
+              </Typography>
+            </Box>
+          )}
+          
           <Box>
             <SKForm
               onSubmit={handleLogin}
