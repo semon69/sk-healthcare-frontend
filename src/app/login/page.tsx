@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Box,
@@ -13,32 +13,27 @@ import Image from "next/image";
 import Link from "next/link";
 import assets from "@/assets";
 import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginUser } from "@/services/actions/login";
 import { toast } from "sonner";
 import { storeUserInfo } from "@/services/authService/authServices";
-
+import SKForm from "@/components/form/SKForm";
+import SKInput from "@/components/form/SKInput";
 
 export interface FormValues {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 const LoginPage = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FormValues>();
-  const onSubmit: SubmitHandler<FormValues> = async (values) => {
+  const handleLogin = async (values: FieldValues) => {
     // console.log(data);
     try {
-      const res = await loginUser(values)
+      const res = await loginUser(values);
       console.log(res);
       if (res?.data?.accessToken) {
-        await storeUserInfo(res?.data?.accessToken)
+        await storeUserInfo(res?.data?.accessToken);
         toast.success(res?.message);
         router.push("/");
       }
@@ -82,22 +77,22 @@ const LoginPage = () => {
           </Stack>
 
           <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <SKForm onSubmit={handleLogin}>
               <Grid container spacing={2} my={1}>
                 <Grid item md={6}>
-                  <TextField
+                  <SKInput
+                    name="email"
                     label="Email"
                     type="email"
                     fullWidth={true}
-                    {...register("email")}
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <SKInput
+                    name="password"
                     label="Password"
                     type="password"
                     fullWidth={true}
-                    {...register("password")}
                   />
                 </Grid>
               </Grid>
@@ -121,7 +116,7 @@ const LoginPage = () => {
                   Create an account
                 </Link>
               </Typography>
-            </form>
+            </SKForm>
           </Box>
         </Box>
       </Stack>

@@ -12,48 +12,29 @@ import {
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { modifyPayload } from "@/utils/verifyPayload";
 import { registerPatient } from "@/services/actions/register";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/actions/login";
 import { storeUserInfo } from "@/services/authService/authServices";
-
-interface TPatienData {
-  name: string;
-  email: string;
-  contactNumber: string;
-  address: string;
-}
-
-interface TPatientRegisterData {
-  password: string;
-  patient: TPatienData;
-}
+import SKInput from "@/components/form/SKInput";
+import SKForm from "@/components/form/SKForm";
 
 const Register = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<TPatientRegisterData>();
-  const onSubmit: SubmitHandler<TPatientRegisterData> = async (values) => {
+
+  const handleRegister = async (values: FieldValues) => {
     const data = modifyPayload(values);
-    // console.log(data);
     try {
       const res = await registerPatient(data);
-      // console.log(res);
       if (res?.data?.id) {
         toast.success(res?.message);
-        // router.push("/login")
         const userRes = await loginUser({
           password: values.password,
           email: values.patient.email,
         });
-        console.log(res);
         if (userRes?.data?.accessToken) {
           storeUserInfo(userRes?.data?.accessToken);
           router.push("/");
@@ -100,44 +81,44 @@ const Register = () => {
           </Stack>
 
           <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <SKForm onSubmit={handleRegister}>
               <Grid container spacing={2} my={1}>
                 <Grid item md={12}>
-                  <TextField
+                  <SKInput
                     label="Name"
                     fullWidth={true}
-                    {...register("patient.name")}
+                    name= "patient.name"
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <SKInput
                     label="Email"
                     type="email"
                     fullWidth={true}
-                    {...register("patient.email")}
+                    name="patient.email"
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <SKInput
                     label="Password"
                     type="password"
                     fullWidth={true}
-                    {...register("password")}
+                    name= "password"
                   />
-                </Grid>
+                </Grid> 
                 <Grid item md={6}>
-                  <TextField
+                  <SKInput
                     label="Contact Number"
                     type="tel"
                     fullWidth={true}
-                    {...register("patient.contactNumber")}
+                    name="patient.contactNumber"
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <SKInput
                     label="Address"
                     fullWidth={true}
-                    {...register("patient.address")}
+                    name= "patient.address"
                   />
                 </Grid>
               </Grid>
@@ -156,7 +137,7 @@ const Register = () => {
                   Login
                 </Link>
               </Typography>
-            </form>
+            </SKForm>
           </Box>
         </Box>
       </Stack>
