@@ -21,7 +21,32 @@ import { loginUser } from "@/services/actions/login";
 import { storeUserInfo } from "@/services/authService/authServices";
 import SKInput from "@/components/form/SKInput";
 import SKForm from "@/components/form/SKForm";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
+export const patientValidationSchema = z.object({
+  name: z.string().min(1, "Please enter your name!"),
+  email: z.string().email("Please enter a valid email address!"),
+  contactNumber: z
+    .string()
+    .regex(/^\d{11}$/, "Please provide a valid phone number!"),
+  address: z.string().min(1, "Please enter your address!"),
+});
+
+export const validationSchema = z.object({
+  password: z.string().min(6, "Must be at least 6 characters"),
+  patient: patientValidationSchema,
+});
+
+export const defaultValues = {
+  password: "",
+  patient: {
+    name: "",
+    email: "",
+    contactNumber: "",
+    address: "",
+  },
+};
 const Register = () => {
   const router = useRouter();
 
@@ -81,14 +106,14 @@ const Register = () => {
           </Stack>
 
           <Box>
-            <SKForm onSubmit={handleRegister}>
+            <SKForm
+              onSubmit={handleRegister}
+              resolver={zodResolver(validationSchema)}
+              defaultValues={defaultValues}
+            >
               <Grid container spacing={2} my={1}>
                 <Grid item md={12}>
-                  <SKInput
-                    label="Name"
-                    fullWidth={true}
-                    name= "patient.name"
-                  />
+                  <SKInput label="Name" fullWidth={true} name="patient.name" />
                 </Grid>
                 <Grid item md={6}>
                   <SKInput
@@ -103,9 +128,9 @@ const Register = () => {
                     label="Password"
                     type="password"
                     fullWidth={true}
-                    name= "password"
+                    name="password"
                   />
-                </Grid> 
+                </Grid>
                 <Grid item md={6}>
                   <SKInput
                     label="Contact Number"
@@ -118,7 +143,7 @@ const Register = () => {
                   <SKInput
                     label="Address"
                     fullWidth={true}
-                    name= "patient.address"
+                    name="patient.address"
                   />
                 </Grid>
               </Grid>

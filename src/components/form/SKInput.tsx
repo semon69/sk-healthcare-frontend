@@ -19,7 +19,7 @@ const SKInput = ({
   size = "small",
   fullWidth,
   sx,
-  required = true,
+  required,
 }: TInputProps) => {
   const { control } = useFormContext();
   return (

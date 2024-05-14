@@ -87,6 +87,10 @@ const LoginPage = () => {
             <SKForm
               onSubmit={handleLogin}
               resolver={zodResolver(validationSchema)}
+              defaultValues={{
+                email: "",
+                password: "",
+              }}
             >
               <Grid container spacing={2} my={1}>
                 <Grid item md={6}>
