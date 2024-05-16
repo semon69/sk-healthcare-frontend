@@ -1,3 +1,4 @@
+import { USER_ROLE } from "@/constact/role";
 import { SvgIconTypeMap } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 
@@ -6,6 +7,8 @@ export type TMeta = {
   limit: number;
   total: number;
 };
+
+export type UserRole = keyof typeof USER_ROLE;
 
 export interface DrawerItem {
   title: string;
