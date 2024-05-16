@@ -1,10 +1,6 @@
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+"use client"
+
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
 import { Box, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,8 +8,15 @@ import assets from "@/assets";
 import { drawerItems } from "@/utils/drawerItems";
 import { UserRole } from "@/types/common";
 import SidebarItem from "./SidebarItems";
+import { useEffect, useState } from "react";
+import { getUserInfo } from "@/services/authService/authServices";
 
 const Sidebar = () => {
+    const [userRole, setUserRole] = useState("")
+    useEffect(()=> {
+        const {role} = getUserInfo()
+        setUserRole(role)
+    }, [])
   return (
     <Box>
       <Stack
@@ -40,7 +43,7 @@ const Sidebar = () => {
         </Typography>
       </Stack>
       <List>
-        {drawerItems("admin" as UserRole).map((item, index) => (
+        {drawerItems(userRole as UserRole).map((item, index) => (
           <SidebarItem key={index} item={item} index={index} />
         ))}
       </List>

@@ -62,7 +62,7 @@ const Register = () => {
         });
         if (userRes?.data?.accessToken) {
           storeUserInfo(userRes?.data?.accessToken);
-          router.push("/");
+          router.push("/dashboard");
         }
       }
     } catch (error: any) {
