@@ -48,7 +48,11 @@ const Footer = () => {
           />
           <Image src={twitter} alt="facebook image" width={40} height={40} />
         </Stack>
-        <div className="border-b-[1px] border-dashed"></div>
+        {/* <div className="border-b-[1px] border-dashed"></div> */}
+
+        <Box sx={{
+          border: "1px dashed lightgray"
+        }}></Box>
         <Stack direction={"row"} justifyContent={"center"} alignItems={"center"} gap={4} py={4}>
           <Typography color={"white"} component={Link} href="/consultations">
             &copy;2024. Ph Healthcare. All Rights Reserved

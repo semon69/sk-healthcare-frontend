@@ -2,7 +2,7 @@ const PatientDashboard
  = () => {
   return (
     <div>
-      <h1>Hello Emon</h1>
+      <h1>Hello mr patient</h1>
     </div>
   );
 };
