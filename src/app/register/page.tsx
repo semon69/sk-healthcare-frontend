@@ -13,7 +13,6 @@ import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { modifyPayload } from "@/utils/verifyPayload";
 import { registerPatient } from "@/services/actions/register";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ import SKInput from "@/components/form/SKInput";
 import SKForm from "@/components/form/SKForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { modifyPayload } from "@/utils/modifyPayload";
 
 export const patientValidationSchema = z.object({
   name: z.string().min(1, "Please enter your name!"),

@@ -2,8 +2,11 @@ import SKFileUploader from "@/components/form/SKFileUploader";
 import SKForm from "@/components/form/SKForm";
 import SKInput from "@/components/form/SKInput";
 import SKModal from "@/components/shared/SKModal";
+import { useCreateSpecialtyMutation } from "@/redux/api/specialitiesApi";
+import { modifyPayload } from "@/utils/modifyPayload";
 import { Button, Grid, TextField } from "@mui/material";
 import { FieldValues } from "react-hook-form";
+import { toast } from "sonner";
 
 type TProps = {
   open: boolean;
@@ -11,9 +14,17 @@ type TProps = {
 };
 
 const SpeciltiesModal = ({ open, setOpen }: TProps) => {
+  
+  const [createSpecialty] = useCreateSpecialtyMutation();
+
   const handleFormSubmit = async (values: FieldValues) => {
+    const data = modifyPayload(values);
     try {
-    
+      const res = await createSpecialty(data).unwrap();
+      if (res?.id) {
+        toast.success("Specialty created successfully!!");
+        setOpen(false);
+      }
     } catch (err: any) {
       console.error(err.message);
     }
