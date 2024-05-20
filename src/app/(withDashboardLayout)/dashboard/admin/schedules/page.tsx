@@ -14,27 +14,26 @@ import { TSchedule } from "@/types/schedule";
 const DoctorScedules = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [allSchedule, setAllSchedule] = useState<any>([]);
-  const { data, isLoading } = useGetAllSchedulesQuery({});
+  const { data, isLoading, isSuccess } = useGetAllSchedulesQuery({});
 
   const schedules = data?.schedules;
   const meta = data?.meta;
 
-  
-
   useEffect(() => {
-    const updateData = schedules?.map((schedule: TSchedule) => {
+    console.log(schedules);
+    const updateData = schedules?.map((schedule: TSchedule, index) => {
       return {
         id: schedule?.id,
-        startDate: dateFormatter(schedule.startDate),
-        endDate: dateFormatter(schedule.endDate),
+        startDate: dateFormatter(schedule?.startDate),
+        endDate: dateFormatter(schedule?.endDate),
         startTime: dayjs(schedule?.startDate).format("hh:mm a"),
         endTime: dayjs(schedule?.endDate).format("hh:mm a"),
       };
     });
     setAllSchedule(updateData);
-  }, [schedules]);
 
-  console.log(schedules);
+    // console.log(updateData);
+  }, [schedules]);
 
   const columns: GridColDef[] = [
     { field: "startDate", headerName: "Start Date", flex: 1 },
@@ -71,7 +70,7 @@ const DoctorScedules = () => {
       </Stack>
       {!isLoading ? (
         <Box my={2}>
-          <DataGrid rows={allSchedule} columns={columns} />
+          <DataGrid rows={allSchedule ?? []} columns={columns} />
         </Box>
       ) : (
         <h1>Loading.....</h1>
